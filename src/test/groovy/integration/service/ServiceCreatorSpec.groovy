@@ -32,8 +32,6 @@ class ServiceCreatorSpec extends Specification {
     @Autowired
     MockMvc mockMvc
     @Autowired
-    ServiceRepository serviceRepository
-    @Autowired
     OfficeBranchRepository officeBranchRepository
     @Autowired
     OfficeHolderRepository officeHolderRepo
@@ -41,7 +39,6 @@ class ServiceCreatorSpec extends Specification {
     AuthUtil authUtil
     @Autowired
     ObjectMapper objectMapper
-
 
     def faker = Faker.instance()
 
@@ -69,7 +66,7 @@ class ServiceCreatorSpec extends Specification {
         officeHolderRepo.store(officeBranch.owner())
         officeBranchRepository.store(officeBranch).get()
         and: 'An authenticated user with different email than office holder'
-        def authentication = authUtil.createAndLoginUser("no.auth@mail.com", "2312")
+        def authentication = authUtil.createAndLoginUser(faker.internet().emailAddress(), "2312")
 
         when:
         ServiceInformation serviceInformation = serviceInformationExample()

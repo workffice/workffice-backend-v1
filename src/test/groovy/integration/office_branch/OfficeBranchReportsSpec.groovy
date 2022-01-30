@@ -21,9 +21,11 @@ import org.springframework.test.web.servlet.MockMvc
 import report.domain.Booking
 import report.domain.BookingRepository
 import server.WorkfficeApplication
+import spock.lang.Shared
 import spock.lang.Specification
 
 import java.time.LocalDate
+import java.time.Year
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 
@@ -49,6 +51,9 @@ class OfficeBranchReportsSpec extends Specification {
     MongoTemplate mongoTemplate
 
     Faker faker = Faker.instance()
+
+    @Shared
+    Integer currentYear = Year.now().getValue()
 
     def cleanup() {
         var collection = mongoTemplate.getCollection("bookings")
@@ -217,21 +222,21 @@ class OfficeBranchReportsSpec extends Specification {
                 officeBranch.id().toString(),
                 "1",
                 8000f,
-                LocalDate.of(2021, 9, 14)
+                LocalDate.of(currentYear, 9, 14)
         )
         def booking2 = Booking.create(
                 "2",
                 officeBranch.id().toString(),
                 "2",
                 100f,
-                LocalDate.of(2021, 11, 8)
+                LocalDate.of(currentYear, 11, 8)
         )
         def booking3 = Booking.create(
                 "3",
                 officeBranch.id().toString(),
                 "2",
                 100f,
-                LocalDate.of(2021, 9, 21)
+                LocalDate.of(currentYear, 9, 21)
         )
         bookingRepo.store(booking1)
         bookingRepo.store(booking2)
@@ -253,7 +258,7 @@ class OfficeBranchReportsSpec extends Specification {
         endpoint << [
                 (id) -> "/api/office_branch_reports/${id}/total_amount_per_office/?month=SEPTEMBER",
                 (id) -> "/api/office_branch_reports/${id}/total_bookings_per_office/?month=SEPTEMBER",
-                (id) -> "/api/office_branch_reports/${id}/total_amount_per_month/?year=2021",
+                (id) -> "/api/office_branch_reports/${id}/total_amount_per_month/?year=${currentYear}",
         ]
         expectedResponse << [
                 [
@@ -265,8 +270,8 @@ class OfficeBranchReportsSpec extends Specification {
                         ['officeId': '1', 'month': 'SEPTEMBER', 'totalBookings': 1],
                 ],
                 [
-                        ['year': 2021, 'month': 'NOVEMBER', 'totalAmount': 100f],
-                        ['year': 2021, 'month': 'SEPTEMBER', 'totalAmount': 8100f],
+                        ['year': currentYear, 'month': 'NOVEMBER', 'totalAmount': 100f],
+                        ['year': currentYear, 'month': 'SEPTEMBER', 'totalAmount': 8100f],
                 ],
         ]
     }
@@ -291,21 +296,21 @@ class OfficeBranchReportsSpec extends Specification {
                 officeBranch.id().toString(),
                 "1",
                 8000f,
-                LocalDate.of(2021, 9, 11)
+                LocalDate.of(currentYear, 9, 11)
         )
         def booking2 = Booking.create(
                 "2",
                 officeBranch.id().toString(),
                 "2",
                 100f,
-                LocalDate.of(2021, 11, 8)
+                LocalDate.of(currentYear, 11, 8)
         )
         def booking3 = Booking.create(
                 "3",
                 officeBranch.id().toString(),
                 "2",
                 100f,
-                LocalDate.of(2021, 9, 21)
+                LocalDate.of(currentYear, 9, 21)
         )
         bookingRepo.store(booking1)
         bookingRepo.store(booking2)
@@ -327,7 +332,7 @@ class OfficeBranchReportsSpec extends Specification {
         endpoint << [
                 (id) -> "/api/office_branch_reports/${id}/total_amount_per_office/?month=SEPTEMBER",
                 (id) -> "/api/office_branch_reports/${id}/total_bookings_per_office/?month=SEPTEMBER",
-                (id) -> "/api/office_branch_reports/${id}/total_amount_per_month/?year=2021",
+                (id) -> "/api/office_branch_reports/${id}/total_amount_per_month/?year=${currentYear}",
         ]
         expectedResponse << [
                 [
@@ -339,8 +344,8 @@ class OfficeBranchReportsSpec extends Specification {
                         ['officeId': '1', 'month': 'SEPTEMBER', 'totalBookings': 1],
                 ],
                 [
-                        ['year': 2021, 'month': 'NOVEMBER', 'totalAmount': 100f],
-                        ['year': 2021, 'month': 'SEPTEMBER', 'totalAmount': 8100f],
+                        ['year': currentYear, 'month': 'NOVEMBER', 'totalAmount': 100f],
+                        ['year': currentYear, 'month': 'SEPTEMBER', 'totalAmount': 8100f],
                 ],
         ]
     }

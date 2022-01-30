@@ -70,7 +70,7 @@ class EquipmentCreatorSpec extends Specification {
         officeHolderRepo.store(officeBranch.owner())
         officeBranchRepository.store(officeBranch).get()
         and: 'An authenticated user with different email than office holder'
-        def authentication = authUtil.createAndLoginUser("no.auth@mail.com", "2312")
+        def authentication = authUtil.createAndLoginUser(faker.internet().emailAddress(), "2312")
 
         when:
         EquipmentInformation equipmentInformation = equipmentInformationExample()

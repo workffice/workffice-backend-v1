@@ -114,7 +114,7 @@ class OfficeCreationSpec extends Specification {
         officeHolderRepo.store(officeBranch.owner())
         officeBranchRepo.store(officeBranch).get()
         and: 'An authenticated user with different email than office holder'
-        def authentication = authUtil.createAndLoginUser("no.auth@mail.com", "1")
+        def authentication = authUtil.createAndLoginUser(faker.internet().emailAddress(), "1")
 
         when:
         OfficeInformation officeInformation = officeInformationExample()

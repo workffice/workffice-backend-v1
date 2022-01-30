@@ -56,28 +56,28 @@ public class TestBookingMongoRepo {
                 "1",
                 "23",
                 1000f,
-                LocalDate.of(2021, 9, 28)
+                LocalDate.of(Year.now().getValue(), 9, 28)
         );
         var booking2 = Booking.create(
                 "2",
                 "1",
                 "23",
                 1000f,
-                LocalDate.of(2021, 9, 11)
+                LocalDate.of(Year.now().getValue(), 9, 11)
         );
         var booking3 = Booking.create(
                 "3",
                 "1",
                 "27",
                 500f,
-                LocalDate.of(2021, 9, 2)
+                LocalDate.of(Year.now().getValue(), 9, 2)
         );
         var booking4 = Booking.create(
                 "4",
                 "1",
                 "27",
                 10f,
-                LocalDate.of(2021, 9, 10)
+                LocalDate.of(Year.now().getValue(), 9, 10)
         );
         // Booking 5 was confirmed in October
         var booking5 = Booking.create(
@@ -85,7 +85,7 @@ public class TestBookingMongoRepo {
                 "1",
                 "27",
                 5000f,
-                LocalDate.of(2021, 10, 10)
+                LocalDate.of(Year.now().getValue(), 10, 10)
         );
         var booking6 = Booking.create(
                 "6",
@@ -118,28 +118,28 @@ public class TestBookingMongoRepo {
                 "1",
                 "23",
                 1000f,
-                LocalDate.of(2021, 9, 28)
+                LocalDate.of(Year.now().getValue(), 9, 28)
         );
         var booking2 = Booking.create(
                 "2",
                 "1",
                 "22",
                 1000f,
-                LocalDate.of(2021, 9, 11)
+                LocalDate.of(Year.now().getValue(), 9, 11)
         );
         var booking3 = Booking.create(
                 "3",
                 "1",
                 "23",
                 500f,
-                LocalDate.of(2021, 9, 2)
+                LocalDate.of(Year.now().getValue(), 9, 2)
         );
         var booking4 = Booking.create(
                 "4",
                 "1",
                 "23",
                 10f,
-                LocalDate.of(2021, 9, 10)
+                LocalDate.of(Year.now().getValue(), 9, 10)
         );
         // Booking 5 was confirmed in October
         var booking5 = Booking.create(
@@ -147,14 +147,14 @@ public class TestBookingMongoRepo {
                 "1",
                 "27",
                 5000f,
-                LocalDate.of(2021, 10, 10)
+                LocalDate.of(Year.now().getValue(), 10, 10)
         );
         var booking6 = Booking.create(
                 "6",
                 "1",
                 "21",
                 5000f,
-                LocalDate.of(2021, 9, 15)
+                LocalDate.of(Year.now().getValue(), 9, 15)
         );
         var booking7 = Booking.create(
                 "7",
@@ -189,42 +189,42 @@ public class TestBookingMongoRepo {
                 "1",
                 "23",
                 1000f,
-                LocalDate.of(2021, 1, 28)
+                LocalDate.of(Year.now().getValue(), 1, 28)
         );
         var booking2 = Booking.create(
                 "2",
                 "1",
                 "22",
                 1000f,
-                LocalDate.of(2021, 1, 11)
+                LocalDate.of(Year.now().getValue(), 1, 11)
         );
         var booking3 = Booking.create(
                 "3",
                 "1",
                 "23",
                 500f,
-                LocalDate.of(2021, 3, 2)
+                LocalDate.of(Year.now().getValue(), 3, 2)
         );
         var booking4 = Booking.create(
                 "4",
                 "1",
                 "23",
                 10f,
-                LocalDate.of(2021, 4, 10)
+                LocalDate.of(Year.now().getValue(), 4, 10)
         );
         var booking5 = Booking.create(
                 "5",
                 "1",
                 "27",
                 5000f,
-                LocalDate.of(2021, 10, 10)
+                LocalDate.of(Year.now().getValue(), 10, 10)
         );
         var booking6 = Booking.create(
                 "6",
                 "1",
                 "21",
                 5000f,
-                LocalDate.of(2021, 10, 15)
+                LocalDate.of(Year.now().getValue(), 10, 15)
         );
         var booking7 = Booking.create(
                 "7",
@@ -242,14 +242,14 @@ public class TestBookingMongoRepo {
         bookingRepo.store(booking7);
 
         var transactionAmounts = bookingRepo
-                .transactionAmountReport("1", Year.of(2021));
+                .transactionAmountReport("1", Year.now());
 
         assertThat(transactionAmounts).size().isEqualTo(4);
         assertThat(transactionAmounts).containsExactly(
-                TransactionAmountProjection.of(2021, "OCTOBER", 10000f),
-                TransactionAmountProjection.of(2021, "APRIL", 10f),
-                TransactionAmountProjection.of(2021, "MARCH", 500f),
-                TransactionAmountProjection.of(2021, "JANUARY", 2000f)
+                TransactionAmountProjection.of(Year.now().getValue(), "OCTOBER", 10000f),
+                TransactionAmountProjection.of(Year.now().getValue(), "APRIL", 10f),
+                TransactionAmountProjection.of(Year.now().getValue(), "MARCH", 500f),
+                TransactionAmountProjection.of(Year.now().getValue(), "JANUARY", 2000f)
         );
     }
 }

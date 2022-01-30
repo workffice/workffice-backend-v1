@@ -1,0 +1,115 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'jacoco'
+    id 'checkstyle'
+    id 'groovy'
+}
+
+group = 'workffice-backend'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'com.sendgrid:sendgrid-java:4.7.2'
+    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'com.mercadopago:sdk-java:1.11.0'
+    runtimeOnly 'com.h2database:h2'
+//    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'mysql:mysql-connector-java'
+    compileOnly 'org.projectlombok:lombok'
+    implementation 'io.vavr:vavr:0.10.3'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.mockito:mockito-core:3.12.4'
+    testImplementation 'org.mockito:mockito-inline:3.8.0'
+    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.mockito', module: 'mockito-all'
+    }
+    testImplementation 'com.icegreen:greenmail:1.6.2'
+    testImplementation 'org.spockframework:spock-spring:2.0-M2-groovy-3.0'
+    testImplementation('org.spockframework:spock-core:2.0-M2-groovy-3.0') {
+        exclude group: 'org.codehaus.groovy'
+    }
+    testImplementation('org.codehaus.groovy:groovy:3.0.2')
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.2',
+            // Uncomment the next line if you want to use RSASSA-PSS (PS256, PS384, PS512) algorithms:
+            //'org.bouncycastle:bcprov-jdk15on:1.60',
+            'io.jsonwebtoken:jjwt-jackson:0.11.2' // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jacocoTestReport {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+    reports {
+        xml.enabled true
+        xml.destination file("${buildDir}/reports/jacoco/report.xml")
+        html.enabled true
+        csv.enabled false
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+//			        'authentication/infrastructure/springsecurity/settings/**',
+            ])
+        }))
+    }
+}
+
+checkstyle {
+    toolVersion '8.0'
+    configFile file("config/checkstyle/checkstyle.xml")
+}
+checkstyleMain {
+    source = 'src/main/java'
+}
+checkstyleTest {
+    source = 'src/test/java'
+}
+tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+static Map getenv(path = ".env") {
+    try {
+        def env = [:]
+        def file = new File(path)
+        file.eachLine { line ->
+            def (name, value) = line.tokenize("=")
+            env[name.trim()] = value.trim()
+        }
+        return env
+    } catch (IOException ignored) {
+        return [:]
+    }
+}
+
+tasks.withType(Test) {
+    environment(getenv(".env-test"))
+}

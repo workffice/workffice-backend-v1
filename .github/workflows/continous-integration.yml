@@ -1,0 +1,35 @@
+on:
+  - pull_request
+
+name: Continuous integration
+jobs:
+  checkstyle:
+    name: 📝 Check style
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Run checkstyle
+        run: |
+          chmod +x gradlew
+          ./gradlew checkstyleMain
+          ./gradlew checkstyleTest
+  run-test-and-upload-coverage-result:
+    name: 🧪 Test and coverage diff
+    needs: [ checkstyle ]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Create coverage report
+        run: |
+          chmod +x gradlew
+          make generate-coverage-report
+      - name: Send coverage report
+        if: success()
+        run: curl -s https://codecov.io/bash | bash
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        shell: bash

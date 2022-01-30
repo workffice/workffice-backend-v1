@@ -1,0 +1,67 @@
+version: "3"
+services:
+  mysql-booking-db:
+    container_name: mysql-booking-db
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql_booking.dev
+    restart: always
+    expose: [ 3306 ]
+    ports:
+      - 3308:3306
+  mysql-backoffice-db:
+    container_name: mysql-backoffice-db
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql_backoffice.dev
+    restart: always
+    expose: [ 3306 ]
+    ports:
+      - 3309:3306
+  mysql-authentication-db:
+    container_name: mysql-authentication-db
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql_authentication.dev
+    restart: always
+    expose: [ 3306 ]
+    ports:
+      - 3307:3306
+  mongo-db:
+    container_name: workffice-mongo-db
+    image: mongo:4.2.16-rc0-bionic
+    environment:
+      ME_CONFIG_MONGODB_SERVER: "workffice"
+    ports:
+      - 27017:27017
+  workffice-server:
+    container_name: workffice-server
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bash -c "/wait && java -jar app.jar --spring.config.location=classpath:/prod_application.properties"
+    environment:
+      DB_BACKOFFICE_HOST: "jdbc:mysql://mysql-backoffice-db/workffice"
+      DB_BACKOFFICE_USERNAME: "root"
+      DB_BACKOFFICE_PASSWORD: "1234"
+      DB_AUTHENTICATION_HOST: "jdbc:mysql://mysql-authentication-db/workffice"
+      DB_AUTHENTICATION_USERNAME: "root"
+      DB_AUTHENTICATION_PASSWORD: "1234"
+      DB_BOOKING_HOST: "jdbc:mysql://mysql-booking-db/workffice"
+      DB_BOOKING_USERNAME: "root"
+      DB_BOOKING_PASSWORD: "1234"
+      MONGO_DB: "workffice"
+      MONGO_HOST: "mongodb://mongo-db:27017/workffice"
+      WAIT_HOSTS: mysql-backoffice-db:3306, mysql-authentication-db:3306, mysql-booking-db:3306, mongo-db:27017
+      WAIT_SLEEP_INTERVAL: 5
+      WAIT_TIMEOUT: 40
+    expose: [ 8080 ]
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    restart: on-failure
+    depends_on:
+      - mysql-authentication-db
+      - mysql-backoffice-db
+      - mongo-db

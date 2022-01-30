@@ -36,6 +36,7 @@ test:
 
 generate-coverage-report:
 	docker-compose -f docker-compose-test.yml up --build -d
+	sleep 10
 	./gradlew test
 	./gradlew jacocoTestReport
 	docker-compose -f docker-compose-test.yml down

@@ -2,8 +2,8 @@
 
 ![workffice-logo.png](workffice-logo.png)
 
-[![CICD](https://github.com/workffice/workffice-backend/actions/workflows/continous-deployment.yml/badge.svg)](https://github.com/workffice/workffice-backend/actions/workflows/continous-deployment.yml)
-[![codecov](https://codecov.io/gh/workffice/workffice-backend/branch/main/graph/badge.svg?token=6I9IPXzPOw)](https://codecov.io/gh/workffice/workffice-backend)
+[![CICD](https://github.com/workffice/workffice-backend-v1/actions/workflows/continous-deployment.yml/badge.svg?branch=main)](https://github.com/workffice/workffice-backend-v1/actions/workflows/continous-deployment.yml)
+[![codecov](https://codecov.io/gh/workffice/workffice-backend-v1/branch/main/graph/badge.svg?token=I96FLHDJL5)](https://codecov.io/gh/workffice/workffice-backend-v1)
 
 ## Description
 This project is a solution for those office holders who want to
